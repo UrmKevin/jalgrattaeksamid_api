@@ -1,0 +1,164 @@
+openapi: 3.0.2
+info:
+  title: register-api
+  version: 1.0.0
+  description: '### See on töötajate nimekirjaga projekt'
+paths:
+  /eksamid:
+    get:
+      tags:
+        - kasuatajad
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+              examples:
+                Kasutajate nimekirja:
+                  value:
+                    - 1kasutaja
+                    - 2kasutaja
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/new-user'
+      deprecated: false
+      summary: hankige kõigi kasutajate loend
+      description: tagastab kõigi kasutajate loendi
+    post:
+      parameters:
+        -
+          name: koht
+          description: ''
+          schema:
+            type: string
+          in: header
+          required: true
+        -
+          name: eksamineerija
+          description: ''
+          schema:
+            type: number
+          in: header
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/new-user'
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/new-user'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+  '/eksamid/{id}':
+    get:
+      tags:
+        - details
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+              examples:
+                Antud kasutaja ID täielikud andmed:
+                  value: |-
+                    {id: 1, koht: "1kasutaja", eksamineerija: 12345, aeg: '12:45'},
+                        {id: 2, koht: "2kasutaja", eksamineerija: 12122, aeg: '11:27'},
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      operationId: id
+      summary: hankige kasutajate täielikud andmed
+      description: tagastab antud kasutaja ID täielikud andmed
+    put:
+      parameters:
+        -
+          name: koht
+          description: ''
+          schema:
+            type: string
+          in: header
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/find-user'
+        '404': {}
+    delete:
+      parameters:
+        -
+          name: id
+          description: ''
+          schema:
+            type: number
+          in: header
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/delete-game'
+        '204': {}
+        '404': {}
+components:
+  schemas:
+    error:
+      title: Root Type for error
+      description: ''
+      type: object
+      properties:
+        error:
+          type: string
+      example:
+        error: Error message
+    new-user:
+      title: Root Type for new-user
+      description: ''
+      required:
+        - koht
+        - eksamineerija
+      type: object
+      properties:
+        koht:
+          type: string
+        eksamineerija:
+          type: number
+      example:
+        koht: kasutaja
+        eksamineerija: '12314'
+        aeg: '2022-12-27 08:26:49.219717'
+    delete-game:
+      description: ''
+      required:
+        - id
+      type: object
+      properties:
+        id:
+          description: ''
+          type: string
+      example:
+        id: 1
+    find-user:
+      description: ''
+      type: object
+      example:
+        id: 1
